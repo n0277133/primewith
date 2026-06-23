@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Finance Dashboard</title>
+
+<style>
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+}
+
+body {
+  min-height: 100vh;
+  color: white;
+  background: radial-gradient(circle at top, #1b2a4a, #0b1220 60%);
+  padding: 24px;
+}
+
+/* =========================
+   LAYOUT WRAPPER
+========================= */
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 26px;
+  letter-spacing: 0.5px;
+}
+
+.header p {
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.badge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #111;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* =========================
+   GLASS CARD SYSTEM
+========================= */
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* =========================
+   TOP GRID
+========================= */
+.top-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+/* =========================
+   BALANCE CARD
+========================= */
+.balance {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #22c55e, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 10px;
+}
+
+/* =========================
+   FORM
+========================= */
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #38bdf8;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+/* =========================
+   TABLE
+========================= */
+.table-card {
+  margin-top: 18px;
+  padding: 18px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  padding-bottom: 10px;
+}
+
+td {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 14px;
+}
+
+.status {
+  font-weight: 600;
+}
+
+.completed { color: #22c55e; }
+.pending { color: #f59e0b; }
+
+/* =========================
+   TOASTS
+========================= */
+#toastContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 320px;
+  z-index: 9999;
+}
+
+.toast {
+  background: rgba(20,20,30,0.9);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  animation: slide 0.25s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+@keyframes slide {
+  from { transform: translateX(40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 900px) {
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>Finance Dashboard</h1>
+      <p>All data is simulated — no real transactions</p>
+    </div>
+    <div class="badge">DEMO MODE</div>
+  </div>
+
+  <!-- TOP GRID -->
+  <div class="top-grid">
+
+    <!-- BALANCE -->
+    <div class="card">
+      <h3>Account Balance</h3>
+      <div class="balance">$90,000,000.00</div>
+      <p style="opacity:0.6;font-size:13px;">Static demo KPI value</p>
+    </div>
+
+    <!-- FORM -->
+    <div class="card">
+      <h3>Create Transaction</h3>
+
+      <select id="method">
+        <option value="">Select Method</option>
+        <option>PayPal</option>
+        <option>Cash App</option>
+        <option>Bank Transfer</option>
+        <option>Crypto Wallet</option>
+        <option>Stripe</option>
+      </select>
+
+      <input id="amount" type="number" placeholder="Enter amount">
+
+      <button id="submitBtn">Submit Transaction</button>
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="card table-card">
+    <h3 style="margin-bottom:12px;">Live Transactions</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Method</th>
+          <th>Amount</th>
+          <th>Fee</th>
+          <th>Net</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="history"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div id="toastContainer"></div>
+
+<script>
+
+/* ================= DATA ================= */
+
+const names = [
+"James Smith","Sarah Johnson","Michael Brown","Emma Williams","Daniel Wilson",
+"Olivia Davis","David Miller","Sophia Martinez","John Taylor","Isabella Anderson",
+"Matthew Thomas","Mia Moore","Andrew Jackson","Charlotte White","Joseph Harris",
+"Amelia Martin","Christopher Thompson","Harper Garcia","Joshua Clark","Evelyn Lewis",
+"Ryan Walker","Elizabeth Hall","Nicholas Allen","Avery Young","Jacob King"
+];
+
+const methods = ["PayPal","Cash App","Bank Transfer","Crypto Wallet","Stripe"];
+
+const FEE = 300;
+
+let transactions = [];
+
+const history = document.getElementById("history");
+
+/* ================= HELPERS ================= */
+
+const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+
+const amt = () => Math.floor(Math.random() * (60000 - 2000)) + 2000;
+
+const now = () => new Date().toLocaleString();
+
+/* ================= TOAST ================= */
+
+function toast(tx) {
+  const el = document.createElement("div");
+  el.className = "toast";
+
+  el.innerHTML = `
+    <strong>New Transaction</strong>
+    <div>${tx.name} • ${tx.method}</div>
+    <div style="opacity:0.7;font-size:12px;margin-top:4px">
+      Net: $${tx.net.toLocaleString()} • ${tx.status}
+    </div>
+  `;
+
+  document.getElementById("toastContainer").appendChild(el);
+  setTimeout(() => el.remove(), 5000);
+}
+
+/* ================= RENDER ================= */
+
+function render() {
+  history.innerHTML = "";
+
+  transactions.forEach(tx => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${tx.name}</td>
+      <td>${tx.date}</td>
+      <td>${tx.method}</td>
+      <td>$${tx.amount.toLocaleString()}</td>
+      <td>$${tx.fee}</td>
+      <td>$${tx.net.toLocaleString()}</td>
+      <td class="status ${tx.status.toLowerCase()}">${tx.status}</td>
+    `;
+
+    history.appendChild(row);
+  });
+}
+
+/* ================= CREATE ================= */
+
+function create() {
+
+  const amount = amt();
+
+  const tx = {
+    name: rand(names),
+    date: now(),
+    method: rand(methods),
+    amount,
+    fee: FEE,
+    net: amount - FEE,
+    status: Math.random() > 0.5 ? "Completed" : "Pending"
+  };
+
+  transactions.unshift(tx);
+
+  if (transactions.length > 25) transactions.pop();
+
+  render();
+  toast(tx);
+}
+
+/* ================= FORM ================= */
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+
+  const method = document.getElementById("method").value;
+  const amount = Number(document.getElementById("amount").value);
+
+  if (!method || !amount) return alert("Fill all fields");
+
+  const tx = {
+    name: "You (Demo)",
+    date: now(),
+    method,
+    amount,
+    fee: FEE,
+    net: amount - FEE,
+    status: "Pending"
+  };
+
+  transactions.unshift(tx);
+
+  render();
+  toast(tx);
+
+  document.getElementById("amount").value = "";
+});
+
+/* ================= AUTO LIVE ================= */
+
+setInterval(create, 10000);
+
+for (let i = 0; i < 6; i++) create();
+
+</script>
+
+</body>
+</html>
